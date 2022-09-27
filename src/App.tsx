@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import ErrorCard from "./components/ErrorCard";
+import ProductCards from "./components/ProductCards";
+import { useFlickr } from "./hooks/useFlickr";
+import { useInfiniteScroll } from "./hooks/useInfiniteScroll";
+import Layout from "./Layouts/Layout";
 
 function App() {
+  const { photos, apiState, loadNextPage, setFavoriteStatus } = useFlickr();
+
+  useInfiniteScroll(() => {
+    return loadNextPage();
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      {apiState === "error" ? (
+        <ErrorCard>Error fetching cards</ErrorCard>
+      ) : undefined}
+      {apiState === "loading" && photos?.length === 0 ? (
+        <p>Loading</p>
+      ) : undefined}
+      {photos ? (
+        <ProductCards photos={photos} onFavorite={setFavoriteStatus} />
+      ) : undefined}
+      {apiState === "loading" && photos && photos.length > 0 ? (
+        <p>Loading next</p>
+      ) : undefined}
+      <button onClick={loadNextPage}>Load photos</button>
+    </Layout>
   );
 }
 
