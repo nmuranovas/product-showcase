@@ -1,3 +1,5 @@
 {
-  "flickrApiKey": "e5036142d598c2708098f16a1f58374e"
+  "flickrApiKey": "e5036142d598c2708098f16a1f58374e",
+  "maxPageNumber": 12,
+  "itemsPerPage": 24
 }

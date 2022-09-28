@@ -14,7 +14,6 @@ export const useInfiniteScroll = (onScrollEndCallback: () => Promise<any>) => {
         return;
       }
 
-      console.log("queued");
       waitingRef.current = true;
       onScrollEndCallback().finally(() => {
         waitingRef.current = false;

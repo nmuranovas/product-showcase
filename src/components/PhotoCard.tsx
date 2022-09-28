@@ -1,38 +1,19 @@
 import styled from "styled-components";
-import { PhotoDto } from "../hooks/useFlickr";
+import { PhotoDto } from "../services/PhotoService";
 import Button from "./Button";
 
 const Container = styled.li`
   position: relative;
-  display: flex;
-
-  flex: 1 1 30%;
-  padding: 8px;
-  height: 30vh;
 
   border-radius: 4px;
-  overflow: hidden;
 
-  @media screen and (max-width: 480px) {
-    flex: 1 0 100%;
-    height: 50vh;
-  }
-
-  @media screen and (max-width: 768px) {
-    flex: 1 0 100%;
-    height: 50vh;
-  }
-
-  @media screen and (max-width: 1024px) {
-    flex: 1 0 48%;
-    height: 40vh;
-  }
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
 `;
 
 const Image = styled.img`
   width: 100%;
+  height: 100%;
   object-fit: cover;
-
   border-radius: inherit;
 `;
 
@@ -42,12 +23,11 @@ const Overlay = styled.div`
   align-items: center;
   justify-content: end;
 
-  padding: 2rem;
+  padding: 20px;
 
   position: absolute;
-  inset: 8px;
+  inset: 0;
 
-  overflow: hidden;
   opacity: 0;
 
   border-radius: inherit;
@@ -55,7 +35,7 @@ const Overlay = styled.div`
   transition: 0.25s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.6);
     opacity: 1;
   }
 `;
@@ -64,6 +44,8 @@ const TitleText = styled.p`
   font-size: 1.375rem;
   font-weight: bold;
   color: white;
+
+  overflow-wrap: anywhere;
 
   margin: 0 0 8px 0;
 
@@ -75,14 +57,16 @@ const AuthorText = styled.p`
   font-style: italic;
   color: white;
 
-  margin: 0 0 8px 0;
+  overflow-wrap: anywhere;
+
+  margin: 0 0 20px 0;
 
   text-align: center;
 `;
 
 const Separator = styled.span`
   display: block;
-  border: 4px solid white;
+  border-bottom: 3px solid white;
   width: 25%;
 
   margin-bottom: 8px;
@@ -90,25 +74,28 @@ const Separator = styled.span`
   border-radius: 4px;
 `;
 
-export interface ProductCardProps extends PhotoDto {
+const truncateText = (str: string, maxLength: number = 36) =>
+  `${str?.substring(0, maxLength)}${str.length > maxLength ? "..." : ""}`;
+
+export interface PhotoCardProps extends PhotoDto {
   onFavorite?: (photoId: string, status: boolean) => void;
 }
 
-export const ProductCard = ({
+export const PhotoCard = ({
   url,
   title,
   author,
   id,
   favorite,
   onFavorite,
-}: ProductCardProps) => {
+}: PhotoCardProps) => {
   return (
     <Container>
       <Image src={url} alt={title} />
       <Overlay>
-        <TitleText>{title?.substring(0, 36)}</TitleText>
+        <TitleText>{truncateText(title)}</TitleText>
         <Separator />
-        <AuthorText>By -{author.substring(0, 36)}</AuthorText>
+        <AuthorText>By - {truncateText(author)}</AuthorText>
         <Button
           label={favorite ? "Unfavorite" : "Favorite"}
           onClick={() => {

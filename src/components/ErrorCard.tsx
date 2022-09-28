@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
-  background-color: #e0e0e0;
-  border-radius: 24px;
-  text-align: center;
+const Container = styled.p`
+  background-color: #f44336;
+  color: white;
+  border-radius: 4px;
   padding: 32px;
 `;
 
