@@ -41,7 +41,7 @@ export const useFlickr = (maxPageNumber: number, itemsPerPage: number) => {
       .catch(() => {
         // sink error
       });
-  }, [pageNumber, maxPageNumber, itemsPerPage]);
+  }, [photos, pageNumber, maxPageNumber, itemsPerPage]);
 
   const setFavoriteStatus = (photoId: string, status: boolean) => {
     const photoIndex = photos.findIndex((p) => p.id === photoId);

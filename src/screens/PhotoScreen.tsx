@@ -1,5 +1,4 @@
 import config from "../config.json";
-
 import styled from "styled-components";
 import ErrorCard from "../components/ErrorCard";
 import { Spinner } from "../components/Spinner";
@@ -8,8 +7,9 @@ import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 import { useEffect } from "react";
 import { PhotoCards } from "../components/PhotoCards";
 
-const BottomSpinner = styled(Spinner)`
+const CenteredSpinner = styled(Spinner)`
   margin-top: 24px;
+  align-self: center;
 `;
 
 const Container = styled.div`
@@ -22,7 +22,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
 
 export const PhotoScreen = () => {
@@ -44,11 +43,12 @@ export const PhotoScreen = () => {
   return (
     <Container>
       {apiState === "error" ? <ErrorCard>{error}</ErrorCard> : undefined}
-      {apiState === "loading" ? <Spinner /> : undefined}
       {photos ? (
         <PhotoCards photos={photos} onFavorite={setFavoriteStatus} />
       ) : undefined}
-      {apiState === "loadingNext" ? <BottomSpinner /> : undefined}
+      {apiState === "loading" || apiState === "loadingNext" ? (
+        <CenteredSpinner />
+      ) : undefined}
     </Container>
   );
 };
